@@ -80,6 +80,12 @@ public class NjkLexerTest extends BasePlatformTestCase {
         }
     }
 
+    public void testRegexLiteral() {
+        assertEquals("{{({{) IDENTIFIER(x) |(|) IDENTIFIER(replace) ((() REGEX(r/[^a-z0-9]+/g) ,(,) STRING(\"-\") )())"
+                        + " |(|) IDENTIFIER(replace) ((() REGEX(r/a\\/b/) ,(,) STRING('') )()) /(/) IDENTIFIER(r) }}(}})",
+                lex("{{ x | replace(r/[^a-z0-9]+/g, \"-\") | replace(r/a\\/b/, '') / r }}"));
+    }
+
     public void testOperators() {
         assertEquals("{{({{) NUMBER(1) +(+) NUMBER(2.5) **(**) NUMBER(2) //(//) NUMBER(3) ==(===) IDENTIFIER(x) ~(~) STRING('s') }}(}})",
                 lex("{{ 1 + 2.5 ** 2 // 3 === x ~ 's' }}"));

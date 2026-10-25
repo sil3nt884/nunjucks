@@ -87,7 +87,7 @@ public final class NjkCompletionContributor extends CompletionContributor {
         if (typeChar != '|' && typeChar != '.') return false;
         if (!position.getLanguage().is(NjkLanguage.INSTANCE)) return false;
         IElementType type = position.getNode().getElementType();
-        return type != TEMPLATE_TEXT && type != COMMENT && type != STRING && type != FRONT_MATTER && type != NUMBER;
+        return type != TEMPLATE_TEXT && type != COMMENT && type != STRING && type != FRONT_MATTER && type != NUMBER && type != REGEX;
     }
 
     // ------------------------------------------------------------------ tags

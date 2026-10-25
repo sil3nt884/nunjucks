@@ -559,7 +559,7 @@ public final class NjkParser implements PsiParser {
                 m.done(STRING_LITERAL);
                 return true;
             }
-            if (t == NUMBER || t == KW_TRUE || t == KW_FALSE || t == KW_NONE) {
+            if (t == NUMBER || t == REGEX || t == KW_TRUE || t == KW_FALSE || t == KW_NONE) {
                 PsiBuilder.Marker m = b.mark();
                 b.advanceLexer();
                 m.done(LITERAL);

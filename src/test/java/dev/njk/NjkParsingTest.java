@@ -71,6 +71,15 @@ public class NjkParsingTest extends BasePlatformTestCase {
         }
     }
 
+    public void testRegexLiteralInFilterArguments() {
+        PsiFile file = myFixture.configureByText("docs.njk", """
+                {% for label, value in group.data %}
+                  {% set documentId = "document-" + (label | trim | lower | replace(r/[^a-z0-9]+/g, "-")) %}
+                {% endfor %}
+                """);
+        assertEmpty(PsiTreeUtil.findChildrenOfType(file, PsiErrorElement.class));
+    }
+
     public void testMissingEndTagIsReported() {
         PsiFile file = myFixture.configureByText("broken.njk", "{% for x in xs %}{% if x %}{{ x }}{% endfor %}");
         Collection<PsiErrorElement> errors = PsiTreeUtil.findChildrenOfType(file, PsiErrorElement.class);

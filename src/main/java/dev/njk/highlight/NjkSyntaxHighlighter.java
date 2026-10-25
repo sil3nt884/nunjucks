@@ -23,6 +23,7 @@ public final class NjkSyntaxHighlighter extends SyntaxHighlighterBase {
         KEYS.put(IDENTIFIER, NjkHighlightColors.IDENTIFIER);
         KEYS.put(STRING, NjkHighlightColors.STRING);
         KEYS.put(NUMBER, NjkHighlightColors.NUMBER);
+        KEYS.put(REGEX, NjkHighlightColors.REGEX);
         KEYS.put(COMMENT, NjkHighlightColors.COMMENT);
         KEYS.put(FRONT_MATTER, NjkHighlightColors.FRONT_MATTER);
         KEYS.put(LPAREN, NjkHighlightColors.PARENTHESES);

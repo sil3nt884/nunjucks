@@ -17,6 +17,8 @@ public final class NjkHighlightColors {
             createTextAttributesKey("NJK_IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
     public static final TextAttributesKey STRING =
             createTextAttributesKey("NJK_STRING", DefaultLanguageHighlighterColors.STRING);
+    public static final TextAttributesKey REGEX =
+            createTextAttributesKey("NJK_REGEX", DefaultLanguageHighlighterColors.VALID_STRING_ESCAPE);
     public static final TextAttributesKey NUMBER =
             createTextAttributesKey("NJK_NUMBER", DefaultLanguageHighlighterColors.NUMBER);
     public static final TextAttributesKey COMMENT =

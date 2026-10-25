@@ -230,6 +230,21 @@ public final class NjkLexer extends LexerBase {
             }
         }
 
+        // Regex literal r/.../flags, read like Nunjucks does: up to the next '/' not preceded by a backslash.
+        if (c == 'r' && at(pos + 1) == '/' && mode != BLOCK_NAME) {
+            int e = pos + 2;
+            while (e < bufferEnd && at(e) != '\n') {
+                if (at(e) == '/' && at(e - 1) != '\\') {
+                    e++;
+                    while (at(e) == 'g' || at(e) == 'i' || at(e) == 'm' || at(e) == 'y') e++;
+                    break;
+                }
+                e++;
+            }
+            token(REGEX, e, mode, depth);
+            return;
+        }
+
         if (isIdentStart(c)) {
             int e = pos + 1;
             while (e < bufferEnd && isIdentPart(at(e))) e++;

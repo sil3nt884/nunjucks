@@ -24,6 +24,8 @@ public interface NjkTokenTypes {
     IElementType IDENTIFIER = new NjkTokenType("IDENTIFIER");
     IElementType STRING = new NjkTokenType("STRING");
     IElementType NUMBER = new NjkTokenType("NUMBER");
+    /** {@code r/[a-z]+/gi} */
+    IElementType REGEX = new NjkTokenType("REGEX");
 
     IElementType KW_AND = new NjkTokenType("and");
     IElementType KW_OR = new NjkTokenType("or");

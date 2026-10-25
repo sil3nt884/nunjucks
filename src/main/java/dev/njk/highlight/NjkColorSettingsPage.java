@@ -29,6 +29,7 @@ public final class NjkColorSettingsPage implements ColorSettingsPage {
             new AttributesDescriptor("Identifiers//Test", NjkHighlightColors.TEST),
             new AttributesDescriptor("Literals//String", NjkHighlightColors.STRING),
             new AttributesDescriptor("Literals//Number", NjkHighlightColors.NUMBER),
+            new AttributesDescriptor("Literals//Regular expression", NjkHighlightColors.REGEX),
             new AttributesDescriptor("Comment", NjkHighlightColors.COMMENT),
             new AttributesDescriptor("Front matter", NjkHighlightColors.FRONT_MATTER),
             new AttributesDescriptor("Operators//Operator", NjkHighlightColors.OPERATOR),
@@ -81,6 +82,7 @@ public final class NjkColorSettingsPage implements ColorSettingsPage {
 
                 {% block <block>content</block> %}
                   {% set <decl>total</decl> = posts | <filter>length</filter> %}
+                  {% set <decl>slug</decl> = title | <filter>lower</filter> | <filter>replace</filter>(r/[^a-z0-9]+/g, "-") %}
                   {% for <decl>post</decl> in posts %}
                     {{ <call>card</call>(post, compact=loop.<member>index</member> > 3) }}
                   {% else %}
