@@ -63,6 +63,16 @@ When the bundled *JavaScript and TypeScript* plugin is present (IntelliJ IDEA Ul
 
 Without the JavaScript plugin, everything else still works. Context variables then come from scanning the text of `render()` calls, with no types.
 
+**Go to Render Sites**
+
+Right-click a template, in the Project view, the editor or an editor tab, and choose **Go to Render Sites**. It's also under *Navigate*. It lists everywhere the template is rendered from:
+- `res.render("…")` / `env.render()` / `getTemplate()` calls
+- other string literals in TS/JS naming the template, such as view-name constants
+- templates that `include`, `extends` or `import` it
+- Eleventy pages that use it as a layout
+
+With a single result it jumps straight there. You can bind a shortcut to it under *Settings → Keymap*.
+
 Navigation also works for:
 - Template paths
 - Imported macros (`forms.field`, or `field` after `from … import field`)
