@@ -35,12 +35,14 @@ public final class NjkTag extends NjkPsiElement {
     }
 
     public boolean isLoop() {
-        return LOOP_TAGS.contains(getTagName());
+        String name = getTagName();
+        return name != null && LOOP_TAGS.contains(name);
     }
 
     /** True for extends, include, import and from, whose first argument names another template. */
     public boolean referencesTemplate() {
-        return TEMPLATE_TAGS.contains(getTagName());
+        String name = getTagName();
+        return name != null && TEMPLATE_TAGS.contains(name);
     }
 
     /** String literal template paths of extends/include/import/from, including those in an include list. */

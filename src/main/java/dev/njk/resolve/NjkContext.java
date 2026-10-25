@@ -181,7 +181,7 @@ public final class NjkContext {
             if (!dir.isDirectory()) continue;
             for (VirtualFile child : dir.getChildren()) {
                 String name = child.isDirectory() ? child.getName() : child.getNameWithoutExtension();
-                if (!child.isDirectory() && !DATA_EXTENSIONS.contains(child.getExtension())) continue;
+                if (!child.isDirectory() && (child.getExtension() == null || !DATA_EXTENSIONS.contains(child.getExtension()))) continue;
                 PsiElement target = child.isDirectory()
                         ? PsiManager.getInstance(project).findDirectory(child)
                         : PsiManager.getInstance(project).findFile(child);

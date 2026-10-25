@@ -18,7 +18,8 @@ public class NjkRenderSitesTest extends BasePlatformTestCase {
                 """);
         myFixture.addFileToProject("apps/manage/src/landing-page/views.ts",
                 "export const LANDING_VIEW = 'landing-page/landing-page.njk';\nexport const OTHER = 'something-else';\n");
-        myFixture.addFileToProject("apps/manage/src/forms.njk", "{% include \"landing-page/landing-page.njk\" %}");
+        // the half-typed {% %} has no tag name, which used to throw while scanning this file
+        myFixture.addFileToProject("apps/manage/src/forms.njk", "{% %}{% include \"landing-page/landing-page.njk\" %}");
         PsiFile template = myFixture.addFileToProject("apps/manage/src/landing-page/landing-page.njk", "<h1>{{ title }}</h1>");
 
         List<NjkRenderSites.Site> sites = NjkRenderSites.find((NjkFile) template);

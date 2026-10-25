@@ -70,7 +70,7 @@ public final class NjkLookup {
         Project project = target.getProject();
         List<NjkTag> result = new ArrayList<>();
         for (VirtualFile file : files(project, NjkSourceScanner.TEMPLATE + NjkSourceScanner.baseName(vf.getName()))) {
-            if (!NjkSourceScanner.TEMPLATE_EXTENSIONS.contains(file.getExtension())) continue;
+            if (file.getExtension() == null || !NjkSourceScanner.TEMPLATE_EXTENSIONS.contains(file.getExtension())) continue;
             NjkFile njk = NjkTemplatePaths.njkFile(project, file);
             if (njk == null) continue;
             for (NjkTag tag : PsiTreeUtil.findChildrenOfType(njk, NjkTag.class)) {
