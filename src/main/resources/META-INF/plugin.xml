@@ -22,49 +22,9 @@
     ]]></description>
 
     <depends>com.intellij.modules.platform</depends>
-    <depends>com.intellij.modules.xml</depends>
-    <depends optional="true" config-file="njk-javascript.xml">JavaScript</depends>
+    <depends optional="true" config-file="njk-core.xml">com.intellij.modules.xml</depends>
 
     <extensionPoints>
         <extensionPoint qualifiedName="dev.njk.typeProvider" interface="dev.njk.types.NjkTypeProvider" dynamic="true"/>
     </extensionPoints>
-
-    <extensions defaultExtensionNs="com.intellij">
-        <fileType name="Nunjucks" implementationClass="dev.njk.NjkFileType" fieldName="INSTANCE"
-                  language="Nunjucks" extensions="njk;nunjucks"/>
-        <lang.parserDefinition language="Nunjucks" implementationClass="dev.njk.parser.NjkParserDefinition"/>
-        <lang.fileViewProviderFactory language="Nunjucks" implementationClass="dev.njk.template.NjkFileViewProviderFactory"/>
-
-        <lang.syntaxHighlighterFactory language="Nunjucks" implementationClass="dev.njk.highlight.NjkSyntaxHighlighterFactory"/>
-        <editorHighlighterProvider filetype="Nunjucks" implementationClass="dev.njk.highlight.NjkEditorHighlighterProvider"/>
-        <colorSettingsPage implementation="dev.njk.highlight.NjkColorSettingsPage"/>
-        <annotator language="Nunjucks" implementationClass="dev.njk.highlight.NjkAnnotator"/>
-
-        <lang.braceMatcher language="Nunjucks" implementationClass="dev.njk.editor.NjkBraceMatcher"/>
-        <lang.commenter language="Nunjucks" implementationClass="dev.njk.editor.NjkCommenter"/>
-        <multiLangCommenter implementation="dev.njk.editor.NjkCommentProvider"/>
-        <lang.foldingBuilder language="Nunjucks" implementationClass="dev.njk.editor.NjkFoldingBuilder"/>
-        <typedHandler implementation="dev.njk.editor.NjkTypedHandler"/>
-        <lang.findUsagesProvider language="Nunjucks" implementationClass="dev.njk.editor.NjkFindUsagesProvider"/>
-        <lang.refactoringSupport language="Nunjucks" implementationClass="dev.njk.editor.NjkRefactoringSupportProvider"/>
-        <lang.documentationProvider language="Nunjucks" implementationClass="dev.njk.docs.NjkDocumentationProvider"/>
-        <codeInsight.lineMarkerProvider language="Nunjucks" implementationClass="dev.njk.editor.NjkBlockLineMarkerProvider"/>
-
-        <completion.contributor language="Nunjucks" implementationClass="dev.njk.completion.NjkCompletionContributor"/>
-        <fileBasedIndex implementation="dev.njk.index.NjkIndex"/>
-
-        <liveTemplateContext contextId="NUNJUCKS" implementation="dev.njk.editor.NjkTemplateContextType"/>
-        <defaultLiveTemplates file="/liveTemplates/Nunjucks.xml"/>
-    </extensions>
-
-    <actions>
-        <action id="Nunjucks.GoToRenderSites" class="dev.njk.actions.NjkGoToRenderSitesAction"
-                text="Go to Render Sites" icon="dev.njk.NjkIcons.RENDER_SITES"
-                description="Show where this template is rendered: render() calls, references in code, and templates that include or extend it">
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="FindUsages"/>
-            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <add-to-group group-id="EditorTabPopupMenu" anchor="last"/>
-            <add-to-group group-id="GoToCodeGroup" anchor="last"/>
-        </action>
-    </actions>
 </idea-plugin>
