@@ -1,0 +1,6 @@
+{% extends "layouts/base.njk" %}
+{% set pageTitle = user.name %}
+
+{% block content %}
+  <p>{{ user.email }} visited {{ visits }} times</p>
+{% endblock %}

@@ -1,0 +1,59 @@
+<idea-plugin>
+    <id>dev.njk.nunjucks</id>
+    <name>Nunjucks Support</name>
+    <vendor>njk</vendor>
+
+    <description><![CDATA[
+    Support for <a href="https://mozilla.github.io/nunjucks/">Nunjucks</a> templates (<code>.njk</code>, <code>.nunjucks</code>).
+    <ul>
+      <li>Syntax highlighting of tags, expressions, filters, tests and comments, with HTML (or any other
+          template data language) highlighted and completed in between</li>
+      <li>Completion of tags (including the right closing tag), filters, tests, variables, macros,
+          <code>loop</code> members, imported macros, block names and template paths</li>
+      <li>Go to declaration for variables, macros, imports, blocks and template paths. For variables that are
+          not declared in the template, finds where they come from: including templates, child and parent
+          templates, front matter, <code>render("template", {...})</code> calls in JavaScript/TypeScript,
+          <code>addGlobal()</code>, <code>app.locals</code> and Eleventy <code>_data</code> files</li>
+      <li>Navigation to custom filters, globals and shortcodes registered with <code>addFilter()</code>,
+          <code>addGlobal()</code>, <code>addShortcode()</code> and friends</li>
+      <li>Block override gutter icons, find usages and rename, folding, brace matching, <code>{# #}</code>
+          commenting, auto-closing delimiters, quick documentation and live templates</li>
+    </ul>
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.xml</depends>
+    <depends optional="true" config-file="njk-javascript.xml">JavaScript</depends>
+
+    <extensionPoints>
+        <extensionPoint qualifiedName="dev.njk.typeProvider" interface="dev.njk.types.NjkTypeProvider" dynamic="true"/>
+    </extensionPoints>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType name="Nunjucks" implementationClass="dev.njk.NjkFileType" fieldName="INSTANCE"
+                  language="Nunjucks" extensions="njk;nunjucks"/>
+        <lang.parserDefinition language="Nunjucks" implementationClass="dev.njk.parser.NjkParserDefinition"/>
+        <lang.fileViewProviderFactory language="Nunjucks" implementationClass="dev.njk.template.NjkFileViewProviderFactory"/>
+
+        <lang.syntaxHighlighterFactory language="Nunjucks" implementationClass="dev.njk.highlight.NjkSyntaxHighlighterFactory"/>
+        <editorHighlighterProvider filetype="Nunjucks" implementationClass="dev.njk.highlight.NjkEditorHighlighterProvider"/>
+        <colorSettingsPage implementation="dev.njk.highlight.NjkColorSettingsPage"/>
+        <annotator language="Nunjucks" implementationClass="dev.njk.highlight.NjkAnnotator"/>
+
+        <lang.braceMatcher language="Nunjucks" implementationClass="dev.njk.editor.NjkBraceMatcher"/>
+        <lang.commenter language="Nunjucks" implementationClass="dev.njk.editor.NjkCommenter"/>
+        <multiLangCommenter implementation="dev.njk.editor.NjkCommentProvider"/>
+        <lang.foldingBuilder language="Nunjucks" implementationClass="dev.njk.editor.NjkFoldingBuilder"/>
+        <typedHandler implementation="dev.njk.editor.NjkTypedHandler"/>
+        <lang.findUsagesProvider language="Nunjucks" implementationClass="dev.njk.editor.NjkFindUsagesProvider"/>
+        <lang.refactoringSupport language="Nunjucks" implementationClass="dev.njk.editor.NjkRefactoringSupportProvider"/>
+        <lang.documentationProvider language="Nunjucks" implementationClass="dev.njk.docs.NjkDocumentationProvider"/>
+        <codeInsight.lineMarkerProvider language="Nunjucks" implementationClass="dev.njk.editor.NjkBlockLineMarkerProvider"/>
+
+        <completion.contributor language="Nunjucks" implementationClass="dev.njk.completion.NjkCompletionContributor"/>
+        <fileBasedIndex implementation="dev.njk.index.NjkIndex"/>
+
+        <liveTemplateContext contextId="NUNJUCKS" implementation="dev.njk.editor.NjkTemplateContextType"/>
+        <defaultLiveTemplates file="/liveTemplates/Nunjucks.xml"/>
+    </extensions>
+</idea-plugin>

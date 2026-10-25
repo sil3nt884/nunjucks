@@ -1,0 +1,7 @@
+{# @param {Post} post #}
+{% macro card(post) %}
+  <article>
+    <h2>{{ post.title }}</h2>
+    <p>by {{ post.author.name }} — {{ post.author | initials | join("") }}</p>
+  </article>
+{% endmacro %}

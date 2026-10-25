@@ -1,0 +1,11 @@
+{% extends "layouts/base.njk" %}
+{% import "macros.njk" as ui %}
+{% set pageTitle = "Blog" %}
+
+{% block content %}
+  <h1>{{ featured.title }}</h1>
+  {% for post in posts %}
+    {{ ui.card(post) }}
+    {# try: post.  author.  loop. #}
+  {% endfor %}
+{% endblock %}

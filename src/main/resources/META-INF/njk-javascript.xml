@@ -1,0 +1,11 @@
+<!-- Loaded only when the JavaScript and TypeScript plugin is installed. -->
+<idea-plugin>
+    <extensions defaultExtensionNs="dev.njk">
+        <typeProvider implementation="dev.njk.javascript.NjkJsTypeProvider"/>
+    </extensions>
+    <extensions defaultExtensionNs="com.intellij">
+        <psi.referenceContributor language="JavaScript" implementation="dev.njk.javascript.NjkJsReferenceContributor"/>
+        <referencesSearch implementation="dev.njk.javascript.NjkJsUsagesSearcher"/>
+        <codeInsight.lineMarkerProvider language="JavaScript" implementationClass="dev.njk.javascript.NjkJsLineMarkerProvider"/>
+    </extensions>
+</idea-plugin>

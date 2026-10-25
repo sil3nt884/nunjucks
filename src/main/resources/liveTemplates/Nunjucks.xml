@@ -1,0 +1,70 @@
+<templateSet group="Nunjucks">
+  <template name="nif" value="{% if $CONDITION$ %}&#10;  $END$&#10;{% endif %}" description="{% if %}...{% endif %}" toReformat="false" toShortenFQNames="false">
+    <variable name="CONDITION" expression="" defaultValue="" alwaysStopAt="true" />
+    <context><option name="NUNJUCKS" value="true" /></context>
+  </template>
+  <template name="nife" value="{% if $CONDITION$ %}&#10;  $THEN$&#10;{% else %}&#10;  $END$&#10;{% endif %}" description="{% if %}...{% else %}...{% endif %}" toReformat="false" toShortenFQNames="false">
+    <variable name="CONDITION" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="THEN" expression="" defaultValue="" alwaysStopAt="true" />
+    <context><option name="NUNJUCKS" value="true" /></context>
+  </template>
+  <template name="nfor" value="{% for $ITEM$ in $ITEMS$ %}&#10;  $END$&#10;{% endfor %}" description="{% for %}...{% endfor %}" toReformat="false" toShortenFQNames="false">
+    <variable name="ITEM" expression="" defaultValue="&quot;item&quot;" alwaysStopAt="true" />
+    <variable name="ITEMS" expression="" defaultValue="&quot;items&quot;" alwaysStopAt="true" />
+    <context><option name="NUNJUCKS" value="true" /></context>
+  </template>
+  <template name="nfore" value="{% for $ITEM$ in $ITEMS$ %}&#10;  $BODY$&#10;{% else %}&#10;  $END$&#10;{% endfor %}" description="{% for %}...{% else %}...{% endfor %}" toReformat="false" toShortenFQNames="false">
+    <variable name="ITEM" expression="" defaultValue="&quot;item&quot;" alwaysStopAt="true" />
+    <variable name="ITEMS" expression="" defaultValue="&quot;items&quot;" alwaysStopAt="true" />
+    <variable name="BODY" expression="" defaultValue="" alwaysStopAt="true" />
+    <context><option name="NUNJUCKS" value="true" /></context>
+  </template>
+  <template name="nblock" value="{% block $NAME$ %}&#10;  $END$&#10;{% endblock %}" description="{% block %}...{% endblock %}" toReformat="false" toShortenFQNames="false">
+    <variable name="NAME" expression="" defaultValue="&quot;content&quot;" alwaysStopAt="true" />
+    <context><option name="NUNJUCKS" value="true" /></context>
+  </template>
+  <template name="nmacro" value="{% macro $NAME$($PARAMS$) %}&#10;  $END$&#10;{% endmacro %}" description="{% macro %}...{% endmacro %}" toReformat="false" toShortenFQNames="false">
+    <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="PARAMS" expression="" defaultValue="" alwaysStopAt="true" />
+    <context><option name="NUNJUCKS" value="true" /></context>
+  </template>
+  <template name="ncall" value="{% call $MACRO$($ARGS$) %}&#10;  $END$&#10;{% endcall %}" description="{% call %}...{% endcall %}" toReformat="false" toShortenFQNames="false">
+    <variable name="MACRO" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="ARGS" expression="" defaultValue="" alwaysStopAt="true" />
+    <context><option name="NUNJUCKS" value="true" /></context>
+  </template>
+  <template name="nset" value="{% set $NAME$ = $VALUE$ %}$END$" description="{% set name = value %}" toReformat="false" toShortenFQNames="false">
+    <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true" />
+    <context><option name="NUNJUCKS" value="true" /></context>
+  </template>
+  <template name="nsetb" value="{% set $NAME$ %}&#10;  $END$&#10;{% endset %}" description="{% set name %}...{% endset %}" toReformat="false" toShortenFQNames="false">
+    <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true" />
+    <context><option name="NUNJUCKS" value="true" /></context>
+  </template>
+  <template name="next" value="{% extends &quot;$TEMPLATE$&quot; %}$END$" description="{% extends &quot;template&quot; %}" toReformat="false" toShortenFQNames="false">
+    <variable name="TEMPLATE" expression="complete()" defaultValue="" alwaysStopAt="true" />
+    <context><option name="NUNJUCKS" value="true" /></context>
+  </template>
+  <template name="ninc" value="{% include &quot;$TEMPLATE$&quot; %}$END$" description="{% include &quot;template&quot; %}" toReformat="false" toShortenFQNames="false">
+    <variable name="TEMPLATE" expression="complete()" defaultValue="" alwaysStopAt="true" />
+    <context><option name="NUNJUCKS" value="true" /></context>
+  </template>
+  <template name="nimp" value="{% import &quot;$TEMPLATE$&quot; as $NAME$ %}$END$" description="{% import &quot;template&quot; as name %}" toReformat="false" toShortenFQNames="false">
+    <variable name="TEMPLATE" expression="complete()" defaultValue="" alwaysStopAt="true" />
+    <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true" />
+    <context><option name="NUNJUCKS" value="true" /></context>
+  </template>
+  <template name="nfrom" value="{% from &quot;$TEMPLATE$&quot; import $NAMES$ %}$END$" description="{% from &quot;template&quot; import name %}" toReformat="false" toShortenFQNames="false">
+    <variable name="TEMPLATE" expression="complete()" defaultValue="" alwaysStopAt="true" />
+    <variable name="NAMES" expression="complete()" defaultValue="" alwaysStopAt="true" />
+    <context><option name="NUNJUCKS" value="true" /></context>
+  </template>
+  <template name="nfilter" value="{% filter $FILTER$ %}&#10;  $END$&#10;{% endfilter %}" description="{% filter %}...{% endfilter %}" toReformat="false" toShortenFQNames="false">
+    <variable name="FILTER" expression="complete()" defaultValue="" alwaysStopAt="true" />
+    <context><option name="NUNJUCKS" value="true" /></context>
+  </template>
+  <template name="nraw" value="{% raw %}$END${% endraw %}" description="{% raw %}...{% endraw %}" toReformat="false" toShortenFQNames="false">
+    <context><option name="NUNJUCKS" value="true" /></context>
+  </template>
+</templateSet>
