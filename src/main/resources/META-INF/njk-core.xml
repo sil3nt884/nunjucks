@@ -32,15 +32,4 @@
         <liveTemplateContext contextId="NUNJUCKS" implementation="dev.njk.editor.NjkTemplateContextType"/>
         <defaultLiveTemplates file="/liveTemplates/Nunjucks.xml"/>
     </extensions>
-
-    <actions>
-        <action id="Nunjucks.GoToRenderSites" class="dev.njk.actions.NjkGoToRenderSitesAction"
-                text="Go to Render Sites" icon="dev.njk.NjkIcons.RENDER_SITES"
-                description="Show where this template is rendered: render() calls, references in code, and templates that include or extend it">
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="FindUsages"/>
-            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <add-to-group group-id="EditorTabPopupMenu" anchor="last"/>
-            <add-to-group group-id="GoToCodeGroup" anchor="last"/>
-        </action>
-    </actions>
 </idea-plugin>

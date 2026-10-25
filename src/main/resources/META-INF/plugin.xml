@@ -27,4 +27,17 @@
     <extensionPoints>
         <extensionPoint qualifiedName="dev.njk.typeProvider" interface="dev.njk.types.NjkTypeProvider" dynamic="true"/>
     </extensionPoints>
+
+    <!-- Registered here, not in njk-core.xml, so that a remote development client with its own copy of the plugin
+         knows the action and shows it; the action is backend-only and runs where the project is. -->
+    <actions>
+        <action id="Nunjucks.GoToRenderSites" class="dev.njk.actions.NjkGoToRenderSitesAction"
+                text="Go to Render Sites" icon="dev.njk.NjkIcons.RENDER_SITES"
+                description="Show where this template is rendered: render() calls, references in code, and templates that include or extend it">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="FindUsages"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <add-to-group group-id="EditorTabPopupMenu" anchor="last"/>
+            <add-to-group group-id="GoToCodeGroup" anchor="last"/>
+        </action>
+    </actions>
 </idea-plugin>
