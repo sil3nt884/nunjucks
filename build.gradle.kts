@@ -1,5 +1,6 @@
 import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import org.jetbrains.intellij.platform.gradle.tasks.VerifyPluginTask
 
 plugins {
     id("java")
@@ -61,8 +62,21 @@ intellijPlatform {
             providers.gradleProperty("verifyIdeVersions").get().split(',').map(String::trim).filter(String::isNotEmpty)
                 .forEach { create(IntelliJPlatformType.IntellijIdea, it) }
         }
+        // Fail on real breaks only. Using the internal ActionRemoteBehaviorSpecification (needed for remote
+        // development) is reported but allowed; if it ever goes away, that shows up as a compatibility problem.
+        failureLevel = listOf(
+            VerifyPluginTask.FailureLevel.COMPATIBILITY_PROBLEMS,
+            VerifyPluginTask.FailureLevel.INVALID_PLUGIN,
+            VerifyPluginTask.FailureLevel.MISSING_DEPENDENCIES,
+        )
     }
     buildSearchableOptions = false
+}
+
+// The downloaded IntelliJ IDEA distribution includes the Ultimate licensing module, which can't start in the
+// test environment and fails every test. The plugin doesn't need it.
+tasks.prepareTestSandbox {
+    disabledPlugins.add("com.intellij.modules.ultimate")
 }
 
 // Open the sample project when trying the plugin with ./gradlew runIde
