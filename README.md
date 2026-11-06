@@ -121,6 +121,20 @@ Two GitHub Actions workflows live in `.github/workflows/`:
   - **All green:** the change is committed to `main`. A new branch also gets a GitHub release with the plugin zip.
   - **Anything breaks:** nothing is committed, and an issue titled "IntelliJ IDEA *version* breaks the plugin" links to the run and its reports.
 
+- **Release** (`release.yml`) runs on pushes to `main`. When `pluginVersion` hasn't been released yet, it builds and publishes GitHub release `v<version>` with the plugin zip and `updatePlugins.xml`.
+
+### Getting updates in IntelliJ automatically
+
+Each release includes `updatePlugins.xml`, a custom plugin repository file. To have IntelliJ pick up new versions by itself:
+
+1. Go to *Settings → Plugins → ⚙ → Manage Plugin Repositories…*.
+2. Add `https://github.com/sil3nt884/nunjucks/releases/latest/download/updatePlugins.xml`.
+3. IntelliJ then offers new versions under *Plugins → Installed* like any Marketplace update. You can also search for "Nunjucks Support" under *Marketplace* to install it from there.
+
+In remote development, add the repository in the remote (backend) IDE's settings, since that's where the plugin does its work.
+
+To release a change yourself, bump `pluginVersion` in `gradle.properties` and push to `main`.
+
 The supported range is the `pluginSinceBuild`/`pluginUntilBuild` pair in `gradle.properties`. Raising `pluginSinceBuild` is left to you. When you do, also update the first entry of `verifyIdeVersions`.
 
 ## Layout

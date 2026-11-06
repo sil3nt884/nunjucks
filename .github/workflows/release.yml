@@ -1,0 +1,56 @@
+# Publishes a GitHub release (plugin zip + updatePlugins.xml) whenever main has a pluginVersion that hasn't been
+# released yet. Version bumps made by the Platform update workflow are released by that workflow itself, because
+# pushes made with the workflow token don't start other workflows.
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check whether this version is released
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(grep '^pluginVersion=' gradle.properties | cut -d= -f2)
+          if gh release view "v$version" >/dev/null 2>&1; then
+            echo "needed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "needed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Free disk space
+        if: steps.check.outputs.needed == 'true'
+        run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+
+      - uses: actions/setup-java@v4
+        if: steps.check.outputs.needed == 'true'
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - uses: gradle/actions/setup-gradle@v4
+        if: steps.check.outputs.needed == 'true'
+
+      - name: Test, verify and build
+        if: steps.check.outputs.needed == 'true'
+        run: ./gradlew test verifyPlugin buildPlugin
+
+      - name: Publish release
+        if: steps.check.outputs.needed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash .github/scripts/publish_release.sh

@@ -66,13 +66,8 @@ jobs:
         if: steps.check.outputs.updated == 'true' && steps.verify.outcome == 'success' && steps.check.outputs.new_branch == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-          VERSION: ${{ steps.check.outputs.version }}
-          PLUGIN_VERSION: ${{ steps.check.outputs.plugin_version }}
-          UNTIL: ${{ steps.check.outputs.until_build }}
-        run: |
-          gh release create "v$PLUGIN_VERSION" build/distributions/*.zip \
-            --title "Nunjucks Support $PLUGIN_VERSION" \
-            --notes "Adds support for IntelliJ IDEA $VERSION (until-build $UNTIL). Tests and the Plugin Verifier pass. Install the zip with Settings → Plugins → ⚙ → Install Plugin from Disk."
+          RELEASE_NOTES: "Adds support for IntelliJ IDEA ${{ steps.check.outputs.version }} (until-build ${{ steps.check.outputs.until_build }}). Tests and the Plugin Verifier pass."
+        run: bash .github/scripts/publish_release.sh
 
       - name: Upload plugin
         if: steps.check.outputs.updated == 'true' && steps.verify.outcome == 'success'
