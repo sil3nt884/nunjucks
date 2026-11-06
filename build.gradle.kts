@@ -1,3 +1,4 @@
+import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 plugins {
@@ -48,9 +49,17 @@ intellijPlatform {
         id = "dev.njk.nunjucks"
         name = "Nunjucks Support"
         version = project.version.toString()
+        // Kept up to date by .github/workflows/platform-update.yml after each new IDE release passes the checks.
         ideaVersion {
-            sinceBuild = "251"
-            untilBuild = provider { null }
+            sinceBuild = providers.gradleProperty("pluginSinceBuild")
+            untilBuild = providers.gradleProperty("pluginUntilBuild")
+        }
+    }
+    pluginVerification {
+        ides {
+            // The oldest and newest IDEs the plugin claims to support, from gradle.properties.
+            providers.gradleProperty("verifyIdeVersions").get().split(',').map(String::trim).filter(String::isNotEmpty)
+                .forEach { create(IntelliJPlatformType.IntellijIdea, it) }
         }
     }
     buildSearchableOptions = false

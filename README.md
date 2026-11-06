@@ -108,6 +108,21 @@ Remove `localIdePath` to have Gradle download `platformVersion` instead.
 
 To install the zip, go to *Settings → Plugins → ⚙ → Install Plugin from Disk…*.
 
+## Continuous integration and IDE updates
+
+Two GitHub Actions workflows live in `.github/workflows/`:
+
+- **Build** (`build.yml`) runs on every push and pull request: tests, the JetBrains Plugin Verifier, and `buildPlugin`. The plugin zip is attached to the run.
+- **Platform update** (`platform-update.yml`) runs every Monday, or by hand from the Actions tab. It asks JetBrains for the newest IntelliJ IDEA release and updates `gradle.properties` with `.github/scripts/platform_update.py`:
+  - **Patch release** in a supported branch (e.g. 2026.2.5): the build and verifier target moves to it. The manifest is unchanged.
+  - **New branch** (e.g. 2026.3, build 263): `pluginUntilBuild` widens to `263.*` and `pluginVersion` gets a patch bump.
+
+  Then it builds, runs the tests and verifies against the oldest and newest supported IDE (`verifyIdeVersions`):
+  - **All green:** the change is committed to `main`. A new branch also gets a GitHub release with the plugin zip.
+  - **Anything breaks:** nothing is committed, and an issue titled "IntelliJ IDEA *version* breaks the plugin" links to the run and its reports.
+
+The supported range is the `pluginSinceBuild`/`pluginUntilBuild` pair in `gradle.properties`. Raising `pluginSinceBuild` is left to you. When you do, also update the first entry of `verifyIdeVersions`.
+
 ## Layout
 
 | Package | Contents |

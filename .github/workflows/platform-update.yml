@@ -1,0 +1,111 @@
+# Keeps the plugin working with new IntelliJ IDEA releases.
+#
+# Every week (or when run by hand) it checks for a newer IntelliJ IDEA release, points gradle.properties at it
+# and, for a new branch such as 2026.3, widens until-build in the plugin manifest. It then builds, runs the tests
+# and runs the Plugin Verifier against the oldest and newest supported IDEs.
+#  - All green: the change is committed to main; a new branch also gets a GitHub release with the plugin zip.
+#  - Anything breaks: nothing is committed, and an issue describes the failure.
+name: Platform update
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: platform-update
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for a newer IntelliJ IDEA release
+        id: check
+        run: python3 .github/scripts/platform_update.py
+
+      - name: Free disk space
+        if: steps.check.outputs.updated == 'true'
+        run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+
+      - uses: actions/setup-java@v4
+        if: steps.check.outputs.updated == 'true'
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - uses: gradle/actions/setup-gradle@v4
+        if: steps.check.outputs.updated == 'true'
+
+      - name: Test, verify and build against IntelliJ IDEA ${{ steps.check.outputs.version }}
+        id: verify
+        if: steps.check.outputs.updated == 'true'
+        continue-on-error: true
+        run: ./gradlew test verifyPlugin buildPlugin
+
+      - name: Commit the update
+        if: steps.check.outputs.updated == 'true' && steps.verify.outcome == 'success'
+        env:
+          VERSION: ${{ steps.check.outputs.version }}
+          BUILD: ${{ steps.check.outputs.build }}
+          UNTIL: ${{ steps.check.outputs.until_build }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add gradle.properties
+          git commit -m "Support IntelliJ IDEA $VERSION ($BUILD)" \
+            -m "Tests and the Plugin Verifier pass. Supported builds: since-build $(grep '^pluginSinceBuild=' gradle.properties | cut -d= -f2), until-build $UNTIL."
+          git push
+
+      - name: Release the new plugin version
+        if: steps.check.outputs.updated == 'true' && steps.verify.outcome == 'success' && steps.check.outputs.new_branch == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.check.outputs.version }}
+          PLUGIN_VERSION: ${{ steps.check.outputs.plugin_version }}
+          UNTIL: ${{ steps.check.outputs.until_build }}
+        run: |
+          gh release create "v$PLUGIN_VERSION" build/distributions/*.zip \
+            --title "Nunjucks Support $PLUGIN_VERSION" \
+            --notes "Adds support for IntelliJ IDEA $VERSION (until-build $UNTIL). Tests and the Plugin Verifier pass. Install the zip with Settings → Plugins → ⚙ → Install Plugin from Disk."
+
+      - name: Upload plugin
+        if: steps.check.outputs.updated == 'true' && steps.verify.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: nunjucks-intellij
+          path: build/distributions/*.zip
+
+      - name: Upload reports
+        if: steps.check.outputs.updated == 'true' && steps.verify.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: |
+            build/reports/
+            build/test-results/
+
+      - name: Report the break
+        if: steps.check.outputs.updated == 'true' && steps.verify.outcome != 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.check.outputs.version }}
+          BUILD: ${{ steps.check.outputs.build }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="IntelliJ IDEA $VERSION breaks the plugin"
+          open=$(gh issue list --state open --search "\"$title\" in:title" --json number --jq length)
+          if [ "$open" = "0" ]; then
+            gh issue create --title "$title" --body "The weekly platform update tried IntelliJ IDEA $VERSION (build $BUILD), and the build, tests or Plugin Verifier failed, so the plugin manifest was not changed.
+
+          Run: $RUN_URL (the test and verifier reports are attached as the \"reports\" artifact).
+
+          Fix the plugin, then run the **Platform update** workflow again."
+          fi
+          echo "::error::IntelliJ IDEA $VERSION breaks the plugin; see $RUN_URL"
+          exit 1
